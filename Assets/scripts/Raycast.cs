@@ -6,7 +6,6 @@ using CodeMonkey.Utils;
 public class Raycast : MonoBehaviour
 {
     public GameObject wallHitPref;
-    public GameObject EnemyHitPref;
     public float shrinkTime = 1f;
 
 
@@ -22,6 +21,14 @@ public class Raycast : MonoBehaviour
         fov = 360f;
         LeanTween.init(10000);
     }
+    //private void OnEnable()
+    //{
+    //    Events.TimerDone += timerDone();
+    //}
+    //private void timerDone()
+    //{
+
+    //}
 
     // Update is called once per frame
     void Update()
@@ -29,22 +36,22 @@ public class Raycast : MonoBehaviour
         int rayCount = 250;
         float angle = startingAngle;
         float angleIncrease = fov / rayCount;
-        for (int i = 0; i <= rayCount; i++)
+        if (Input.GetKeyDown("space"))
         {
-            Vector3 vertex;
-            RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, UtilsClass.GetVectorFromAngle(angle), viewDistance);
-            if (raycastHit2D.collider == null)
+            spacePressed = true;
+            Events.onSpacePressed?.Invoke(spacePressed);
+            Events.TimerOn?.Invoke(spacePressed);
+            for (int i = 0; i <= rayCount; i++)
             {
-                // No hit
-                vertex = transform.position + UtilsClass.GetVectorFromAngle(angle) * viewDistance;
-            }
-            else
-            {
-                // Hit object
-                if (Input.GetKeyDown("space"))
+                Vector3 vertex;
+                RaycastHit2D raycastHit2D = Physics2D.Raycast(transform.position, UtilsClass.GetVectorFromAngle(angle), viewDistance);
+                if (raycastHit2D.collider == null)
                 {
-                    spacePressed = true;
-                    Events.onSpacePressed?.Invoke(spacePressed);
+                    // No hit
+                }
+                else
+                {
+                    // Hit object
                     vertex = raycastHit2D.point;
                     if (!raycastHit2D.transform.gameObject.CompareTag("blip"))
                     {
@@ -55,8 +62,8 @@ public class Raycast : MonoBehaviour
                                 .setOnComplete(() => Destroy(newblip));
                     }
                 }
+                angle -= angleIncrease;
             }
-            angle -= angleIncrease;
         }
     }
 

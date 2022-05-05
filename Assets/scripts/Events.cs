@@ -6,4 +6,6 @@ using System;
 public static class Events
 {
     public static Action<bool> onSpacePressed;
+    public static Action<bool> TimerOn;
+    public static Action<bool> TimerDone;
 }

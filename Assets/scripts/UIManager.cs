@@ -10,9 +10,12 @@ public class UIManager : MonoBehaviour
     {
         Events.onSpacePressed += removeText;
     }
+    private void OnDisable()
+    {
+    }
     private void removeText(bool spacePressed)
     {
         tutorialtxt.text = " ";
     }
-
+    
 }
